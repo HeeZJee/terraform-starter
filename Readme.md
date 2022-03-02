@@ -35,7 +35,7 @@
 
     aws_instance.web_server.name
 
-### Variables
+### Input Variables
 
     variable "aws_region" {
         type = string
@@ -44,9 +44,25 @@
         sensitive = false    
     }
 
-### Variable Reference
+#### Input Variable Reference
 
     var.aws_region
+
+### Local Variables
+
+    locals {
+        instance_prefix = "globo"
+        common_tags = {
+            company = "HeeZJee"
+            project = var.project
+            billing = var.billing
+        }
+    }
+
+#### Local Variable Reference
+
+    local.instance_prefix
+    local.common_tags.company
 
 ## Data Types
 

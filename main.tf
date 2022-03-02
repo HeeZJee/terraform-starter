@@ -24,18 +24,20 @@ data "aws_ssm_parameter" "ami" {
 resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = var.enable_dns_hostnames
+  tags                 = locals.common_tags
 
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
-
+  tags   = locals.common_tags
 }
 
 resource "aws_subnet" "subnet1" {
   cidr_block              = var.vpc_subnet1_cidr_block
   vpc_id                  = aws_vpc.vpc.id
   map_public_ip_on_launch = vpc.map_public_ip_on_launch
+  tags                    = locals.common_tags
 }
 
 # ROUTING #
@@ -51,6 +53,7 @@ resource "aws_route_table" "rtb" {
 resource "aws_route_table_association" "rta-subnet1" {
   subnet_id      = aws_subnet.subnet1.id
   route_table_id = aws_route_table.rtb.id
+  tags           = locals.common_tags
 }
 
 # SECURITY GROUPS #
@@ -58,6 +61,7 @@ resource "aws_route_table_association" "rta-subnet1" {
 resource "aws_security_group" "nginx-sg" {
   name   = "nginx_sg"
   vpc_id = aws_vpc.vpc.id
+  tags   = locals.common_tags
 
   # HTTP access from anywhere
   ingress {
@@ -82,6 +86,7 @@ resource "aws_instance" "nginx1" {
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.subnet1.id
   vpc_security_group_ids = [aws_security_group.nginx-sg.id]
+  tags                   = locals.common_tags
 
   user_data = <<EOF
 #! /bin/bash
@@ -90,6 +95,5 @@ sudo service nginx start
 sudo rm /usr/share/nginx/html/index.html
 echo '<html><head><title>Taco Team Server</title></head><body style=\"background-color:#1F778D\"><p style=\"text-align: center;\"><span style=\"color:#FFFFFF;\"><span style=\"font-size:28px;\">You did it! Have a &#127790;</span></span></p></body></html>' | sudo tee /usr/share/nginx/html/index.html
 EOF
-
 }
 
