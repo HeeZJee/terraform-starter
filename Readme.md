@@ -34,3 +34,22 @@
 ### Object Reference
 
     aws_instance.web_server.name
+
+### Variables
+
+    variable "aws_region" {
+        type = string
+        description = "Region to use for AWS resources"
+        default = "us-east-1"
+        sensitive = false    
+    }
+
+### Variable Reference
+
+    var.aws_region
+
+## Data Types
+
+1. *Primitive*: string, number, boolean
+2. *Collection*: list, set, map
+3. *Structural*: tuple, object
