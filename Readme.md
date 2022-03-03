@@ -64,6 +64,14 @@
     local.instance_prefix
     local.common_tags.company
 
+
+### Output Variables
+
+    output "public_dns_hostname" {
+        value = aws_instance.web_server.public_dns
+        description = "Public DNS hostname web server"
+    }
+
 ## Data Types
 
 1. *Primitive*: string, number, boolean

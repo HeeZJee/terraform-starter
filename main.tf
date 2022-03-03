@@ -36,13 +36,14 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_subnet" "subnet1" {
   cidr_block              = var.vpc_subnet1_cidr_block
   vpc_id                  = aws_vpc.vpc.id
-  map_public_ip_on_launch = vpc.map_public_ip_on_launch
+  map_public_ip_on_launch = var.map_public_ip_on_launch
   tags                    = local.common_tags
 }
 
 # ROUTING #
 resource "aws_route_table" "rtb" {
   vpc_id = aws_vpc.vpc.id
+  tags           = local.common_tags
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -53,7 +54,6 @@ resource "aws_route_table" "rtb" {
 resource "aws_route_table_association" "rta-subnet1" {
   subnet_id      = aws_subnet.subnet1.id
   route_table_id = aws_route_table.rtb.id
-  tags           = local.common_tags
 }
 
 # SECURITY GROUPS #
